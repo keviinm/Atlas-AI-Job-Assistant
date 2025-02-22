@@ -1,16 +1,25 @@
-from crew.crew_manager import JobApplicationCrewManager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from api.routes import router
+from mangum import Mangum  # ✅ Required for AWS Lambda
 
-def main():
-    job_posting_url = 'https://jobs.lever.co/AIFund/6c82e23e-d954-4dd8-a734-c0c2c5ee00f1'
-    github_url = 'https://github.com/keviinm?tab=repositories'
-    personal_writeup = """
-        Noah is an accomplished Software Engineering Leader with 18 years of experience,
-        specializing in managing remote and in-office teams. He has a strong background in AI
-        and data science and has successfully led major tech initiatives.
-    """
+app = FastAPI(title="Atlas AI Job Assistant API")
 
-    manager = JobApplicationCrewManager(job_posting_url, github_url, personal_writeup)
-    manager.run()
+# CORS settings (needed for frontend)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include API routes
+app.include_router(router)
+
+# ✅ AWS Lambda Handler
+handler = Mangum(app)
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
