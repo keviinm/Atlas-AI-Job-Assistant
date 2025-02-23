@@ -1,14 +1,16 @@
-# ✅ Use AWS Lambda Python Image
+# ✅ Use Amazon Linux 2 (compatible with AWS Lambda)
+FROM amazonlinux:2 as builder
+
+# ✅ Install SQLite 3.35+ from Amazon's official repository
+RUN amazon-linux-extras enable python3.10 && \
+    yum install -y sqlite python3.10 python3-pip gcc gcc-c++ make tar gzip wget && \
+    sqlite3 --version  # ✅ Confirm installed version
+
+# ✅ Now, switch to AWS Lambda Base Image
 FROM public.ecr.aws/lambda/python:3.10
 
-# ✅ Install dependencies (including SQLite 3.35+ from source)
-RUN yum install -y gcc gcc-c++ make wget tar && \
-    wget https://www.sqlite.org/2024/sqlite-autoconf-3440000.tar.gz && \
-    tar xvfz sqlite-autoconf-3440000.tar.gz && \
-    cd sqlite-autoconf-3440000 && \
-    ./configure --prefix=/usr && make && make install && \
-    cd .. && rm -rf sqlite-autoconf-3440000 sqlite-autoconf-3440000.tar.gz && \
-    sqlite3 --version  # ✅ Confirm installed version
+# ✅ Copy SQLite binary from builder stage
+COPY --from=builder /usr/bin/sqlite3 /usr/bin/sqlite3
 
 # ✅ Set Working Directory
 WORKDIR /var/task
