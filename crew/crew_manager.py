@@ -1,4 +1,4 @@
-from logging_setup import get_logger
+from utils.logging_setup import get_logger
 from crewai import Crew
 from crew.environment import CrewEnvironment
 from crew.tools import CrewTools

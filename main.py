@@ -3,7 +3,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 # Debug SQLite version
-from logging_setup import get_logger
+from utils.logging_setup import get_logger
 import sqlite3
 print(f"🟢 SQLite Version: {sqlite3.sqlite_version}") 
 
@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes import router
 from mangum import Mangum  # ✅ Required for AWS Lambda
 
+logger = get_logger(__name__)
 app = FastAPI(title="Atlas AI Job Assistant API")
 logger.info("FastAPI application instance created.")
 
