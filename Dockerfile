@@ -1,14 +1,9 @@
-# ✅ Use AWS Lambda Python Image
-FROM public.ecr.aws/lambda/python:3.10
+# ✅ Use Amazon Linux 2023 instead of Amazon Linux 2
+FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 
-# ✅ Install SQLite (3.35+)
-RUN yum install -y gcc gcc-c++ make tar gzip wget && \
-    wget https://www.sqlite.org/2024/sqlite-autoconf-3440000.tar.gz && \
-    tar xvfz sqlite-autoconf-3440000.tar.gz && \
-    cd sqlite-autoconf-3440000 && \
-    ./configure --prefix=/usr && make && make install && \
-    cd .. && rm -rf sqlite-autoconf-3440000 sqlite-autoconf-3440000.tar.gz && \
-    sqlite3 --version  # ✅ Confirm installed version
+# ✅ Install SQLite 3.35+ and Python3.10
+RUN dnf install -y sqlite sqlite-devel python3.10 python3-pip gcc gcc-c++ make tar gzip wget \
+    && sqlite3 --version  # ✅ Confirm installed version
 
 # ✅ Set Working Directory
 WORKDIR /var/task
@@ -17,13 +12,13 @@ WORKDIR /var/task
 COPY requirements.txt .
 
 # ✅ Install Dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# ✅ Define build arguments for API keys
+# Define build arguments for API keys
 ARG OPENAI_API_KEY
 ARG SERPER_API_KEY
 
-# ✅ Set environment variables inside the container
+# ✅ Set environment variables
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 ENV SERPER_API_KEY=${SERPER_API_KEY}
 
