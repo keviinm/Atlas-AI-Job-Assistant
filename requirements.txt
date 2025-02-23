@@ -3,3 +3,4 @@ crewai-tools
 langchain-community
 python-dotenv
 mangum
+pysqlite3-binary==0.5.2
