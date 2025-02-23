@@ -1,3 +1,4 @@
+from logging_setup import get_logger
 from crewai import Crew
 from crew.environment import CrewEnvironment
 from crew.tools import CrewTools
@@ -9,6 +10,7 @@ class JobApplicationCrewManager:
     """Manages the execution of the job application crew."""
     def __init__(self, job_posting_url, github_url, personal_writeup):
         CrewEnvironment.configure()
+        logger.info("Initializing JobApplicationCrewManager")
         self.tools = CrewTools()
         self.agents = CrewAgents(self.tools)
         self.tasks = CrewTasks(self.agents, job_posting_url, github_url, personal_writeup)

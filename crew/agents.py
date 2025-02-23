@@ -1,9 +1,11 @@
+from logging_setup import get_logger
 from crewai import Agent
 
 class CrewAgents:
     """Defines CrewAI agents."""
     
     def __init__(self, tools):
+        logger.info(f"Initializing Agent: role={role}, goal='{goal}'")
         self.tools = tools
         self.researcher = self._create_researcher()
         self.profiler = self._create_profiler()
