@@ -1,6 +1,10 @@
 # ✅ Use AWS Lambda Python Image
 FROM public.ecr.aws/lambda/python:3.10
 
+# ✅ Install SQLite 3.35+
+RUN yum install -y sqlite && \
+    sqlite3 --version
+
 # ✅ Set Working Directory
 WORKDIR /var/task
 
