@@ -25,7 +25,11 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build --platform linux/amd64 -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:latest .
+        docker build --platform linux/amd64 \
+          --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+          --build-arg SERPER_API_KEY=${{ secrets.SERPER_API_KEY }} \
+          -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:latest .
+
         docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:latest
 
     - name: Update AWS Lambda
