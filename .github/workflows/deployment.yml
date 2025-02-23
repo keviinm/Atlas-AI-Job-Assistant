@@ -31,6 +31,6 @@ jobs:
     - name: Update AWS Lambda
       run: |
         aws lambda update-function-code \
-          --function-name AtlasAIJobAssistant \
+          --function-name atlasAIJobs \
           --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:latest \
           --region ${{ secrets.AWS_REGION }}
